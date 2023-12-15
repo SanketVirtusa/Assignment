@@ -1,0 +1,462 @@
+Problem No1 
+Solution is given Below:
+
+
+public class Account {
+    protected double balance;
+    protected double interestRate;
+
+    public Account(double balance, double interestRate) {
+        this.balance = balance;
+        this.interestRate = interestRate;
+    }
+
+    public void calculateInterest() {
+        double interest = balance * interestRate / 100;
+        balance += interest;
+        System.out.println("Interest calculated and added. New balance: " + balance);
+    }
+
+    public void displayBalance() {
+        System.out.println("Current balance: " + balance);
+    }
+}
+
+
+public class SavingsAccount extends Account {
+    private double minBalance;
+
+    public SavingsAccount(double balance, double interestRate, double minBalance) {
+        super(balance, interestRate);
+        this.minBalance = minBalance;
+    }
+
+    @Override
+    public void calculateInterest() {
+        if (balance > minBalance) {
+            super.calculateInterest();
+        } else {
+            System.out.println("Interest not calculated. Balance below minimum.");
+        }
+    }
+}
+
+
+public class CurrentAccount extends Account {
+    private double overdraftLimit;
+
+    public CurrentAccount(double balance, double interestRate, double overdraftLimit) {
+        super(balance, interestRate);
+        this.overdraftLimit = overdraftLimit;
+    }
+
+    @Override
+    public void displayBalance() {
+        super.displayBalance();
+        System.out.println("Overdraft Limit: " + overdraftLimit);
+    }
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+        
+        SavingsAccount savingsAccount = new SavingsAccount(1000, 5, 500);
+        CurrentAccount currentAccount = new CurrentAccount(2000, 3, 1000);
+
+        
+        savingsAccount.calculateInterest();
+        savingsAccount.displayBalance();
+
+        System.out.println();
+
+        currentAccount.calculateInterest();
+        currentAccount.displayBalance();
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Problem 2:
+Solution code
+
+
+class Student:
+    def __init__(self, name, grade, age):
+        self.name = name
+        self.grade = grade
+        self.age = age
+
+    def display(self):
+        print(f"Name: {self.name}, Grade: {self.grade}, Age: {self.age}")
+
+
+class School(Student):
+    def school_student_display(self):
+        print(f"Name: {self.name}, Grade: {self.grade}, Age: {self.age} (School Student)")
+
+
+if __name__ == "__main__":
+    # Creating an object using Student class
+    student1 = Student("John", "A", 15)
+    
+    
+    print("Information using Student class:")
+    student1.display()
+    print()
+
+   
+    school_student1 = School("Alice", "B", 16)
+    
+    
+    print("Information using School class:")
+    school_student1.school_student_display()
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Problem 3:
+Solution Code
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+geckodriver_path = 'path/to/geckodriver'
+
+
+driver = webdriver.Firefox(executable_path=geckodriver_path)
+
+
+driver.get("https://www.makemytrip.com/")
+
+try:
+    
+    logo_element = driver.find_element(By.XPATH, "//img[@alt='MakeMyTrip']")
+    if logo_element.is_displayed():
+        print("MakeMyTrip logo is present on the page.")
+    else:
+        print("MakeMyTrip logo is not displayed on the page.")
+except Exception as e:
+    print(f"Error: {e}")
+
+
+driver.quit()
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Problem 4:
+
+Solution code
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+chromedriver_path = 'c/Intel/chromedriver'
+
+driver = webdriver.Chrome(executable_path=chromedriver_path)
+
+def wait_for_element(driver, by, value, timeout=10):
+    return WebDriverWait(driver, timeout).until(
+        EC.presence_of_element_located((by, value))
+    )
+
+def click_element(driver, by, value):
+    element = wait_for_element(driver, by, value)
+    element.click()
+
+def enter_text(driver, by, value, text):
+    element = wait_for_element(driver, by, value)
+    element.clear()
+    element.send_keys(text)
+
+driver.get("https://www.makemytrip.com/")
+
+try:
+    # Click on the "Flights" menu
+    click_element(driver, By.XPATH, "//a[@data-cy='menu_Flights']")
+
+    # Click on "OneWay" option
+    click_element(driver, By.XPATH, "//li[@data-cy='oneWayTrip']")
+
+    # Enter "FROM" location
+    enter_text(driver, By.XPATH, "//input[@id='fromCity']", "New Delhi")
+
+    # Enter "TO" location
+    enter_text(driver, By.XPATH, "//input[@id='toCity']", "Mumbai")
+
+except Exception as e:
+    print(f"Error: {e}")
+
+driver.quit()
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Problem 5:
+Solution code
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+public class MakeMyTripTest {
+    private WebDriver driver;
+
+    @BeforeMethod
+    public void setup() {
+        
+        System.setProperty("webdriver.chrome.driver", "c/Intel/chromedriver");
+
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+    }
+
+    @AfterMethod
+    public void teardown() {
+        // Close the browser window
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+
+    @Test
+    public void testMakeMyTripLogo() {
+        // Navigate to the MakeMyTrip website
+        driver.get("https://www.makemytrip.com/");
+
+        // Verify if the MakeMyTrip logo is present on the page
+        WebElement logoElement = driver.findElement(By.xpath("//img[@alt='MakeMyTrip']"));
+        Assert.assertTrue(logoElement.isDisplayed(), "MakeMyTrip logo is not displayed on the page.");
+    }
+
+    @Test
+    public void testFlightBooking() {
+        // Navigate to the MakeMyTrip website
+        driver.get("https://www.makemytrip.com/");
+
+        // Perform flight booking steps
+        // (Click on "Flights" menu, select "OneWay," enter "FROM" and "TO" locations)
+
+        // For simplicity, let's assume the code for flight booking steps is here
+
+        // Verify a condition related to flight booking
+        // ...
+
+        // Assert.assertTrue(condition, "Assertion message if the condition is not met");
+    }
+}
+
+To generate HTML reports, you can execute the test using the TestNG XML suite. Create a testng.xml file with the following content:
+
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="MakeMyTripSuite">
+    <test name="MakeMyTripTest">
+        <classes>
+            <class name="YourPackageName.MakeMyTripTest"/>
+        </classes>
+    </test>
+</suite>
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Problem 6:
+Solution code
+
+Create a Maven Project:
+
+Command line example:
+
+mvn archetype:generate -DgroupId=gmail.com -DartifactId=makemytrip-tests -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+
+
+Add Dependencies in pom.xml:
+Open the pom.xml file in the project directory and add the necessary dependencies for Selenium and TestNG.
+
+<dependencies>
+    <!-- Selenium WebDriver -->
+    <dependency>
+        <groupId>org.seleniumhq.selenium</groupId>
+        <artifactId>selenium-java</artifactId>
+        <version>3.141.59</version>
+    </dependency>
+
+    <!-- TestNG -->
+    <dependency>
+        <groupId>org.testng</groupId>
+        <artifactId>testng</artifactId>
+        <version>7.3.0</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+
+Create Package and Implement Programs:
+Create a package structure in the src/main/java directory. Place your Java classes with the implementations in this package.
+
+Run Programs using Maven Commands:
+Open a terminal in your project directory and run the Maven commands.
+
+To compile and package your project:
+
+bash
+
+mvn clean package
+
+To run the TestNG tests:
+
+bash
+
+mvn test
+To generate the TestNG HTML report:
+
+bash
+
+mvn surefire-report:report
+The HTML report will be generated in the target/site/surefire-report.html file.
+
+Here's a simplified directory structure:
+
+lua
+
+makemytrip-tests/
+|-- src/
+|   `-- main/
+|       `-- java/
+|           `-- com/
+|               `-- example/
+|                   `-- Sanket.java
+|-- pom.xml
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Problem 8:
+Solution Code
+
+Postman Collection Setup:
+1. Create a Collection:
+
+Open Postman.
+On the left sidebar, click on "Collections."
+Click on "New Collection" and give it a name, e.g., "University API Testing."
+
+2. Positive Test Case:
+
+Click on the collection you created.
+Click on "Add Request" and name it, e.g., "Positive Case - Get Universities in the United States."
+Set the request method to "GET."
+Enter the API endpoint URL: http://universities.hipolabs.com/search?country=United+States
+
+javascript
+
+// Positive Test - Check for a successful response
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+// Additional positive checks if needed
+// Example: Check if the response body has certain properties
+pm.test("Response body has universities", function () {
+    const jsonData = pm.response.json();
+    pm.expect(jsonData.length).to.be.greaterThan(0);
+});
+
+3. Negative Test Case:
+
+Add another request to the same collection, e.g., "Negative Case - Invalid Country."
+Set the request method to "GET."
+Enter the API endpoint URL with an invalid country: http://universities.hipolabs.com/search?country=InvalidCountry
+
+javascript
+
+// Negative Test - Check for an error response
+pm.test("Status code is 404", function () {
+    pm.response.to.have.status(404);
+});
+
+// Additional negative checks if needed
+// Example: Check if the error message is as expected
+pm.test("Response body has error message", function () {
+    const jsonData = pm.response.json();
+    pm.expect(jsonData.error).to.equal("Not Found");
+});
+
+4. Running the Tests:
+Click on the request (e.g., "Positive Case - Get Universities in the United States") in the collection.
+Click on the "Send" button to execute the request.
+Review the test results in the "Tests" tab.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Problem 9:
+Solution Code
+
+JMeter Test Plan Setup:
+
+1. Create a New Test Plan:
+
+Open JMeter.
+Right-click on "Test Plan" in the left panel.
+Choose "Add" -> "Threads (Users)" -> "Thread Group."
+
+2.Configure Thread Group:
+
+Right-click on the Thread Group you just created.
+Choose "Add" -> "Config Element" -> "HTTP Request Defaults."
+Set the "Server Name or IP" field to www.makemytrip.com and the "Protocol" to https.
+
+3.Add an HTTP Request:
+
+Right-click on the Thread Group.
+Choose "Add" -> "Sampler" -> "HTTP Request."
+Set the "Path" field to /.
+
+4.Add an Assertion:
+
+Right-click on the HTTP Request.
+
+Choose "Add" -> "Assertions" -> "Response Assertion."
+
+Configure the Response Assertion to validate a specific pattern in the response.
+
+Example:
+
+Check if the response contains the text "MakeMyTrip" in the body.
+Set "Field to Test" to "Text Response."
+Set "Pattern Matching Rules" to "Contains."
+Enter the text "MakeMyTrip" in the "Patterns to Test" field.
+
+5.Add Listeners for Assertion Results:
+
+Right-click on the Thread Group.
+Choose "Add" -> "Listener" -> "View Results Tree."
+
+6.Run the Test:
+
+Click on the "Run" menu and choose "Start" or use the "Run" button.
+
+   - Add additional configurations if needed (e.g., number of threads, loop count) in the Thread Group.
+   - Save your Test Plan.
+   - Run the test by clicking the "Run" button or using the "Run" menu.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Problem 10:
+Solution Code
+
+import pytest
+from selenium import webdriver
+
+@pytest.fixture(scope="function")
+def setup(request):
+    
+    chromedriver_path = 'c/Intel/chromedriver'
+
+    
+    driver = webdriver.Chrome(executable_path=chromedriver_path)
+    driver.maximize_window()
+
+  
+    driver.get("https://www.w3schools.com/")
+
+    def teardown():
+       
+        driver.quit()
+
+
+    request.addfinalizer(teardown)
+
+    return driver
+
+def test_w3schools_logo_presence(setup):
+    
+    logo_element = setup.find_element_by_xpath("//a[@title='W3Schools']/img[@alt='W3Schools.com']")
+    assert logo_element.is_displayed(), "W3Schools logo is not displayed on the page."
